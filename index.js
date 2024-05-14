@@ -1,9 +1,12 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
+const bodyParser = require('body-parser')
 dotenv.config();
 
 const app = express();
+
+app.use(bodyParser.urlencoded());
 
 const User = mongoose.model('User', {
     firstName: String,
@@ -22,6 +25,22 @@ app.get('/users', async (req, res) => {
         res.json({
             status: 'Success',
             data: users
+        })
+    } catch (error) {
+        res.json({
+            status: 'Failed',
+            message: 'Something went wrong'
+        })
+    }
+})
+
+app.post('/users', async (req, res) => {
+    try {
+        const { firstName, lastName, email, phone } = req.body
+        await User.create({ firstName, lastName, email, phone })
+        res.json({
+            status: 'Success',
+            message: 'User created successfully'
         })
     } catch (error) {
         res.json({
