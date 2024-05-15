@@ -67,6 +67,22 @@ app.patch('/users/:id', async (req, res) => {
     }
 })
 
+app.delete('/users/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        await User.findByIdAndDelete(id)
+        res.json({
+            status: 'Success',
+            message: 'User deleted successfully'
+        })
+    } catch (error) {
+        res.json({
+            status: 'Failed',
+            message: 'Something went wrong'
+        })
+    }
+})
+
 app.listen(process.env.PORT, () => {
     mongoose
         .connect(process.env.MONGODB_URL)
