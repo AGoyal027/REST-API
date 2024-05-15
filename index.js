@@ -50,6 +50,23 @@ app.post('/users', async (req, res) => {
     }
 })
 
+app.patch('/users/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { firstName, lastName, email, phone } = req.body
+        await User.findByIdAndUpdate(id, { firstName, lastName, email, phone })
+        res.json({
+            status: 'Success',
+            message: 'User updated successfully'
+        })
+    } catch (error) {
+        res.json({
+            status: 'Failed',
+            message: 'Something went wrong'
+        })
+    }
+})
+
 app.listen(process.env.PORT, () => {
     mongoose
         .connect(process.env.MONGODB_URL)
